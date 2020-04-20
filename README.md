@@ -1,2 +1,1 @@
-# probable-couscous
-SQL, Microsoft SQL Server
+Acest Repository contine temele de laborator realizate pentru disciplina Baze de Date. In realizarea acestor teme am folosit Baze de Date Relatinoale si limbajul SQL. In Repository exista un document pdf cu cerintele aferente.
