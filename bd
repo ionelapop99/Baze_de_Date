@@ -1,0 +1,66 @@
+go
+create procedure adauga_medici(@cod_indentificare INT,@nume Varchar(50),@prenume Varchar(50),@ani_experienta int,@cod_sindicat int,@cod_specializare int)
+as
+begin
+declare @nr int=0;
+Select @nr=count(*) from Medic where cod_indentificare=@cod_indentificare 
+if @nr=0
+begin
+Insert into Medic values (@cod_indentificare ,@nume ,@prenume,@ani_experienta ,@cod_sindicat ,@cod_specializare )
+Print ('Adaugare cu succes')
+end;
+else
+print('Acest Id mai exista!')
+end;
+go
+exec adauga_medici 15,'Mihai','Andrei',10,11,2;
+go
+create procedure adauga_consultatie(@medicamente_prescripse Varchar(120),@cod_indentificare INT,@cnp INT)
+as 
+begin
+declare @nr int=0
+Select @nr=count(*) from Consultatie where cod_indentificare=@cod_indentificare and cnp=@cnp and datac=GETDATE()
+if(@nr=0)
+begin
+Insert into Consultatie(datac,medicamente_prescripse,cod_indentificare,cnp) values(getdate(),@medicamente_prescripse,@cod_indentificare,@cnp)
+end
+else
+Print('Aceasta Consultatie mai exista')
+end;
+go
+exec adauga_consultatie 'Algocalmin si Miofilin',123,100;
+go
+create procedure adauga_pacienti(@cnp int,@nume Varchar(25),@prenume Varchar(25),@nr_telefon Varchar(20))
+as
+begin
+declare @nr int =0
+select @nr=count(*) from Pacient where cnp=@cnp
+if(@nr=0)
+begin
+Insert into Pacient values (@cnp ,@nume ,@prenume ,@nr_telefon )
+Print('Adaugare cu succes!')
+end;
+else
+print('Acest Id mai exista!')
+end;
+go
+exec adauga_pacienti 112,'Vasile','Ion','0757455852';
+/* 3  implementati, pentru un tabel la alegere, un trigger pentru operatia de adaugare si unul pentru
+ cea de stergere;  */
+ go
+ create trigger La_adaugare
+ on Medic
+ for insert
+ as begin
+ Print 'Data la care a avut loc Inserarea : '+ Cast(getdate() as Varchar(30))+'  In baza de date MEDIC'
+
+ end;
+ go
+
+ create trigger La_stergere
+ on Medic
+ for delete
+ as begin
+  Print 'Data la care a avut loc Stergerea : '+ Cast(getdate() as Varchar(30))+'  In baza de date MEDIC'
+ end;
+ delete Medic where cod_indentificare=112;
